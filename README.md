@@ -23,5 +23,3 @@ Spoken-language information is often inaccessible or delayed for sign-language u
 - Research and development of larger sign-language tools
 - A sign dictionary that can grow through new labelled motion clips and NLP-based retrieval
 - University, School teaching
-
-**Scope:** one-way generation only. There is **no sign-language recognition**, webcam classifier, or sign→text path.
