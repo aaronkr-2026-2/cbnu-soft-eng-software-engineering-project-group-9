@@ -1,0 +1,10 @@
+{
+  "signs": 20,
+  "landmark_frames": 994,
+  "motion_bytes": 744675,
+  "landmarks_per_frame": 75,
+  "source_dataset": "WLASL",
+  "raw_video_included": false,
+  "raw_audio_included": false,
+  "recognition_model_included": false
+}
