@@ -6,6 +6,7 @@ Small, English-only **text/speech → isolated ASL pose** prototype.
 
 CoSpeakLocal currently includes 20 isolated ASL sign-motion clips derived from the WLASL dataset. Each clip is converted into pose landmarks for body, hands, and face, then used to generate visual sign-motion sequences from supported English words and phrases.
 
+currently using fast-whisper but will change in future for faster pipeline for speech-to-text
 
 ## Product vision
 
