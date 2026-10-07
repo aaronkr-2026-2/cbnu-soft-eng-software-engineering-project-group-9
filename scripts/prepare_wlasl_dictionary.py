@@ -46,6 +46,19 @@ def find_source(cache: Path, key: str) -> Path | None:
     return None
 
 
+def local_source_map(root: Path) -> dict[str, Path]:
+    """Index a pre-downloaded WLASL corpus by the dataset video id."""
+    if not root.is_dir():
+        raise FileNotFoundError(f'local WLASL video root does not exist: {root}')
+    videos: dict[str, Path] = {}
+    for suffix in ('*.mp4', '*.webm', '*.mkv', '*.mov'):
+        for path in root.rglob(suffix):
+            videos.setdefault(path.stem, path)
+    if not videos:
+        raise RuntimeError(f'no videos found below {root}')
+    return videos
+
+
 def download_source(yt_dlp: Path, cache: Path, url: str) -> Path:
     key = source_key(url)
     existing = find_source(cache, key)
@@ -89,6 +102,27 @@ def candidate_rows(metadata: list[dict], glosses: list[str]) -> dict[str,list[di
     return result
 
 
+def existing_glosses(index: Path) -> list[str]:
+    if not index.exists():
+        return []
+    try:
+        obj = json.loads(index.read_text(encoding='utf-8'))
+    except json.JSONDecodeError:
+        return []
+    return [str(entry.get('gloss', '')).strip().lower() for entry in obj.get('entries', []) if entry.get('gloss')]
+
+
+def top_local_glosses(metadata: list[dict], video_paths: dict[str, Path]) -> list[str]:
+    """Rank glosses by the number of usable local WLASL instances."""
+    ranked: list[tuple[int, str]] = []
+    for row in metadata:
+        gloss = str(row.get('gloss', '')).strip().lower()
+        count = sum(str(inst.get('video_id')) in video_paths for inst in row.get('instances', []))
+        if gloss and count:
+            ranked.append((count, gloss))
+    return [gloss for _, gloss in sorted(ranked, key=lambda item: (-item[0], item[1]))]
+
+
 def main() -> int:
     ap=argparse.ArgumentParser()
     ap.add_argument('--metadata', default='data/vendor/wlasl/WLASL_v0.3.json')
@@ -97,16 +131,33 @@ def main() -> int:
     ap.add_argument('--cache', default='data/raw/wlasl_cache')
     ap.add_argument('--yt-dlp', default=('tools/yt-dlp.exe' if sys.platform.startswith('win') else 'tools/yt-dlp'))
     ap.add_argument('--glosses', default=','.join(DEFAULT_GLOSSES))
+    ap.add_argument('--local-video-root', help='pre-downloaded WLASL corpus; skips yt-dlp downloads')
+    ap.add_argument('--target-count', type=int, help='expand the requested/current dictionary to this many locally covered glosses')
+    ap.add_argument('--portable-index-paths', action='store_true', help='store clip paths relative to the index for deployment')
     ap.add_argument('--max-attempts-per-gloss', type=int, default=4)
     ap.add_argument('--force', action='store_true', help='re-extract existing clips with the active pose pipeline')
     ap.add_argument('--keep-source', action='store_true')
     args=ap.parse_args()
-    glosses=[g.strip().lower() for g in args.glosses.split(',') if g.strip()]
     metadata=ensure_metadata(Path(args.metadata))
-    candidates=candidate_rows(metadata, glosses)
     out=Path(args.out); out.mkdir(parents=True,exist_ok=True)
     cache=Path(args.cache); ytdlp=Path(args.yt_dlp).resolve()
+    local_videos = local_source_map(Path(args.local_video_root)) if args.local_video_root else None
+    requested=[g.strip().lower() for g in args.glosses.split(',') if g.strip()]
+    if args.target_count is not None:
+        if args.target_count < 1:
+            raise ValueError('--target-count must be positive')
+        if local_videos is None:
+            raise ValueError('--target-count requires --local-video-root for reproducible coverage selection')
+        seeds = existing_glosses(Path(args.index)) + requested
+        ranked = top_local_glosses(metadata, local_videos)
+        glosses = list(dict.fromkeys(seeds + ranked))[:args.target_count]
+    else:
+        glosses = list(dict.fromkeys(requested))
+    candidates=candidate_rows(metadata, glosses)
     entries=[]; report=[]
+
+    def index_clip_path(path: Path) -> str:
+        return f'asl_clips/{path.name}' if args.portable_index_paths else str(path.resolve())
 
     # Existing outputs are reusable.
     for gloss in glosses:
@@ -115,7 +166,7 @@ def main() -> int:
         if existing and not args.force:
             from cospeaklocal.schema import MotionClip
             clip=MotionClip.load_npz(existing[0])
-            entries.append({'gloss':gloss,'clip_id':clip.clip_id,'path':str(existing[0].resolve()),
+            entries.append({'gloss':gloss,'clip_id':clip.clip_id,'path':index_clip_path(existing[0]),
                             'fps':clip.fps,'source':clip.source,'quality':clip.quality})
             continue
         insts=candidates.get(gloss,[])
@@ -126,7 +177,9 @@ def main() -> int:
             rec={'gloss':gloss,'video_id':inst.get('video_id'),'url':url,'instance_id':inst.get('instance_id')}
             pending=None
             try:
-                src=download_source(ytdlp,cache,url)
+                src = local_videos.get(str(inst.get('video_id'))) if local_videos is not None else download_source(ytdlp,cache,url)
+                if src is None:
+                    raise FileNotFoundError(f'local WLASL video is unavailable for {inst.get("video_id")}')
                 sfps,nframes=source_info(src)
                 ann_fps=float(inst.get('fps') or 25.0)
                 fs=max(1,int(inst.get('frame_start') or 1))
@@ -146,7 +199,7 @@ def main() -> int:
                 if q.get('pose_detect_rate',0.0) < 0.75 or active < 0.45:
                     raise RuntimeError(f'poor landmark coverage {q}')
                 pending.replace(path)
-                entries.append({'gloss':gloss,'clip_id':clip.clip_id,'path':str(path.resolve()),
+                entries.append({'gloss':gloss,'clip_id':clip.clip_id,'path':index_clip_path(path),
                                 'fps':clip.fps,'source':'wlasl','signer_id':inst.get('signer_id'),
                                 'video_id':inst.get('video_id'),'quality':q})
                 rec.update(status='ok',frames=len(clip.poses),quality=q,source_fps=sfps,source_frames=nframes)
@@ -159,7 +212,7 @@ def main() -> int:
                 rec.update(status='failed',error=repr(e)); report.append(rec)
                 print(f'{gloss}: retry after {e!r}',flush=True)
             finally:
-                if not args.keep_source and url:
+                if local_videos is None and not args.keep_source and url:
                     p=find_source(cache,source_key(url))
                     if p: p.unlink(missing_ok=True)
         if not ok:

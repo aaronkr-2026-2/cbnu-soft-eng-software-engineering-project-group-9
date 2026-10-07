@@ -11,7 +11,7 @@ def test_deploy_bundle_is_portable_and_complete():
     root=Path(__file__).resolve().parents[1]
     index=root/'demo_data/asl_dictionary.json'
     obj=json.loads(index.read_text(encoding='utf-8'))
-    assert len(obj['entries']) == 20
+    assert len(obj['entries']) == 300
     assert all(not Path(m['path']).is_absolute() for m in obj['entries'])
     assert {m['gloss'] for m in obj['entries']} >= {'hello','thank you','yes','no','help','what','how','you'}
     d=SignDictionary(index)

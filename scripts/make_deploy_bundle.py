@@ -14,10 +14,12 @@ def main() -> int:
     index_path=Path(args.index).resolve()
     obj=json.loads(index_path.read_text(encoding='utf-8'))
     out=Path(args.out)
-    if out.exists():
+    in_place = out.resolve() == index_path.parent.resolve()
+    if out.exists() and not in_place:
         shutil.rmtree(out)
     clips_out=out/'asl_clips'; clips_out.mkdir(parents=True,exist_ok=True)
     entries=[]; total_bytes=0; total_frames=0
+    landmark_counts: set[int] = set()
     from cospeaklocal.schema import MotionClip
     for src_meta in obj.get('entries',[]):
         meta=dict(src_meta)
@@ -26,10 +28,12 @@ def main() -> int:
         if not src.exists(): raise FileNotFoundError(src)
         # Derivatives only: compact landmark NPZ, never source video/audio.
         dst=clips_out/src.name
-        shutil.copy2(src,dst)
+        if src.resolve() != dst.resolve():
+            shutil.copy2(src,dst)
         clip=MotionClip.load_npz(dst)
         total_frames += len(clip.poses)
         total_bytes += dst.stat().st_size
+        landmark_counts.add(int(clip.poses.shape[1]))
         # Do not ship source URL or local path; only minimal provenance IDs.
         meta['path']=f'asl_clips/{dst.name}'
         entries.append(meta)
@@ -39,7 +43,7 @@ def main() -> int:
         'signs':len(entries),
         'landmark_frames':total_frames,
         'motion_bytes':total_bytes,
-        'landmarks_per_frame':75,
+        'landmarks_per_frame': next(iter(landmark_counts)) if len(landmark_counts) == 1 else sorted(landmark_counts),
         'source_dataset':'WLASL',
         'raw_video_included':False,
         'raw_audio_included':False,
