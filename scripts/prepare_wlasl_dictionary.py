@@ -1,7 +1,7 @@
 """Build an English isolated-ASL landmark dictionary from WLASL metadata.
 
-This follows ViSTAR's generation-side pattern: one gloss -> one isolated motion
-sequence. Raw source videos are temporary and are never committed.
+Each gloss maps to one isolated motion sequence. Raw source videos are
+temporary and are never committed.
 """
 from __future__ import annotations
 import argparse

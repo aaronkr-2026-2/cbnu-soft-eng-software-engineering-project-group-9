@@ -8,11 +8,11 @@ Expand CoSpeakLocal from 20 to 300 quality-checked WLASL pose signs while keepin
 
 | Priority | Item | Owner |
 | --- | --- | --- |
-| P0 | [#2 Expand WLASL pose dictionary to 300 signs](https://github.com/aaronkr-2026-2/cbnu-soft-eng-software-engineering-project-group-9/issues/2) | Đỗ Minh Tùng |
-| P0 | [#3 Validate 300-sign dictionary for Vercel deployment](https://github.com/aaronkr-2026-2/cbnu-soft-eng-software-engineering-project-group-9/issues/3) | Đỗ Minh Tùng |
-| P1 | [#4 Add data-driven semantic sign retrieval](https://github.com/aaronkr-2026-2/cbnu-soft-eng-software-engineering-project-group-9/issues/4) | Đỗ Minh Tùng |
-| P1 | [#5 Add pose quality gates and regression checks](https://github.com/aaronkr-2026-2/cbnu-soft-eng-software-engineering-project-group-9/issues/5) | Đỗ Minh Tùng |
-| P2 | [#6 Improve vocabulary discovery and examples](https://github.com/aaronkr-2026-2/cbnu-soft-eng-software-engineering-project-group-9/issues/6) | Đỗ Minh Tùng |
+| P0 | #2 Expand WLASL pose dictionary to 300 signs | Đỗ Minh Tùng |
+| P0 | #3 Validate 300-sign dictionary for Vercel deployment | Đỗ Minh Tùng |
+| P1 | #4 Add data-driven semantic sign retrieval | Đỗ Minh Tùng |
+| P1 | #5 Add pose quality gates and regression checks | Đỗ Minh Tùng |
+| P2 | #6 Improve vocabulary discovery and examples | Đỗ Minh Tùng |
 
 ## Refined work
 
@@ -35,7 +35,7 @@ Acceptance: Vercel build completes; hosted health reports at least 300 signs; no
 
 ## Definition of done
 
-- [ ] Implementation is committed and pushed to both repositories.
+- [ ] Implementation is committed and pushed.
 - [ ] Automated tests pass.
 - [ ] Relevant issue has tasks, owner, and acceptance checks.
 - [ ] Derived data is indexed and verified; raw source media is excluded.

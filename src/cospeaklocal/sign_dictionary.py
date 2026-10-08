@@ -38,8 +38,7 @@ class SignMatch:
 class SignDictionary:
     """Portable word/gloss -> isolated sign motion dictionary.
 
-    This mirrors ViSTAR's generation-side dictionary pattern but uses a compact
-    JSON index instead of Elasticsearch. It performs longest exact gloss match;
+    It uses a compact JSON index and performs longest exact gloss matching;
     it is intentionally not a sign recognizer or a learned translation model.
     """
 
