@@ -35,9 +35,9 @@ Acceptance: Vercel build completes; hosted health reports at least 300 signs; no
 
 ## Definition of done
 
-- [ ] Implementation is committed and pushed.
-- [ ] Automated tests pass.
-- [ ] Relevant issue has tasks, owner, and acceptance checks.
-- [ ] Derived data is indexed and verified; raw source media is excluded.
-- [ ] Vercel deployment and smoke test succeed.
-- [ ] README/API-visible sign count reflects the shipped dictionary.
+- [x] Implementation is committed and pushed.
+- [x] Automated tests pass.
+- [x] Relevant issue has tasks, owner, and acceptance checks.
+- [x] Derived data is indexed and verified; raw source media is excluded.
+- [x] Vercel deployment and smoke test succeed.
+- [x] README/API-visible sign count reflects the shipped dictionary.
