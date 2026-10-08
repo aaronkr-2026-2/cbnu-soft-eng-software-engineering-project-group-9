@@ -4,7 +4,7 @@ Every time you update your project, please make a note of what you did in the `A
 
 ---
 
-## [Milestone name] — [Date]
+## [Initial Push]
 **Tool(s) used:** Deepseek Code
 **What I asked for:** I ask for extract landmark for me and create frontend/backend for me
 **What I kept as-is:**
