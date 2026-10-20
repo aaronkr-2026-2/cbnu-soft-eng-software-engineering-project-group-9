@@ -4,9 +4,14 @@ Small, English-only **text/speech → isolated ASL pose** prototype.
 
 ## MVP Status
 
-CoSpeakLocal currently includes 20 isolated ASL sign-motion clips derived from the WLASL dataset. Each clip is converted into pose landmarks for body, hands, and face, then used to generate visual sign-motion sequences from supported English words and phrases.
+Sprint 1 is complete: the WLASL pose dictionary has been expanded to 300 signs and is deployed on Vercel. Semantic retrieval and vocabulary discovery remain planned follow-up work.
 
-currently using fast-whisper but will change in future for faster pipeline for speech-to-text
+Speech input uses browser speech recognition; local audio transcription is available with faster-whisper.
+
+## Documentation
+
+- [Software architecture and diagrams](docs/architecture.md)
+- [Sprint 1 results and backlog](SPRINT_01.md)
 
 ## Product vision
 

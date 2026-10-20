@@ -6,6 +6,12 @@ Expand CoSpeakLocal from 20 to 300 quality-checked WLASL pose signs while keepin
 
 ## Prioritized backlog
 
+**Status: Complete — sprint goal achieved.** Reviewed on 20 October 2026.
+
+The dictionary expansion and deployment tasks (#2 and #3) are complete. The production health endpoint reports the expanded vocabulary. The implementation passed 25 automated tests during delivery.
+
+Items #4, #5, and #6 remain open as follow-up backlog; they are not completed by this sprint.
+
 | Priority | Item | Owner |
 | --- | --- | --- |
 | P0 | #2 Expand WLASL pose dictionary to 300 signs | Đỗ Minh Tùng |
