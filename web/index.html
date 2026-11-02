@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="English text or speech to isolated ASL pose sequences.">
+<title>CoSpeakLocal · Text to ASL pose</title>
+<style>
+:root{color-scheme:dark;--bg:#080b14;--panel:#111725;--panel2:#0d1320;--line:#263149;--text:#f4f7ff;--muted:#9aa7bd;--accent:#91f2ce;--accent2:#9db8ff;--warn:#ffd58a}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 70% -10%,#16264a 0,transparent 36%),var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.shell{width:min(1180px,calc(100% - 32px));margin:0 auto;padding:28px 0 54px}.topbar{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:36px}.brand{font-weight:800;letter-spacing:-.03em;font-size:20px}.pill{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:#0d1422cc;border-radius:999px;padding:7px 11px;color:var(--muted);font-size:12px}.dot{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 15px var(--accent)}.hero{display:grid;grid-template-columns:minmax(0,1.02fr) minmax(420px,.98fr);gap:26px;align-items:stretch}.copy,.stage{border:1px solid var(--line);border-radius:26px;background:linear-gradient(180deg,#111827f2,#0c111dcc);box-shadow:0 24px 70px #0005}.copy{padding:36px}.eyebrow{color:var(--accent);font-size:12px;text-transform:uppercase;letter-spacing:.14em;font-weight:800}.copy h1{font-size:clamp(38px,5vw,70px);line-height:.96;letter-spacing:-.06em;margin:15px 0 18px;max-width:720px}.sub{color:var(--muted);font-size:17px;line-height:1.6;max-width:700px}.inputbox{margin-top:28px;border:1px solid var(--line);background:var(--panel2);border-radius:18px;padding:14px}.inputbox textarea{width:100%;resize:vertical;min-height:112px;border:0;outline:0;background:transparent;color:var(--text);font:inherit;font-size:16px;line-height:1.5;padding:4px}.actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px}.btn{appearance:none;border:1px solid var(--line);border-radius:12px;padding:11px 15px;font-weight:750;cursor:pointer;background:#161f31;color:var(--text);transition:.16s transform,.16s border-color,.16s background}.btn:hover{transform:translateY(-1px);border-color:#485a7d}.btn.primary{background:var(--text);color:#0b0e15;border-color:var(--text)}.btn.mic.active{background:#18362f;border-color:#397866}.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}.examples{display:flex;gap:8px;flex-wrap:wrap;margin-top:15px}.example{font-size:12px;border:1px solid #25334d;background:#0a111e;color:#b8c5da;border-radius:999px;padding:7px 10px;cursor:pointer}.meta{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:24px}.metric{border-top:1px solid var(--line);padding-top:15px}.metric strong{display:block;font-size:20px}.metric span{color:var(--muted);font-size:12px}.stage{position:relative;overflow:hidden;min-height:620px}.stagehead{display:flex;justify-content:space-between;gap:14px;align-items:center;padding:18px 20px;border-bottom:1px solid var(--line)}.status{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.canvaswrap{height:500px;position:relative;background:radial-gradient(circle at 50% 32%,#172443 0,#090d16 57%,#070a11 100%)}canvas{display:block;width:100%;height:100%}.floor{position:absolute;left:12%;right:12%;bottom:52px;height:1px;background:linear-gradient(90deg,transparent,#5f6b82,transparent);opacity:.55}.matches{position:absolute;left:16px;right:16px;bottom:15px;display:flex;gap:8px;flex-wrap:wrap}.match{backdrop-filter:blur(10px);background:#0b101bd9;border:1px solid #34415d;border-radius:999px;padding:7px 10px;font-size:11px;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.match strong{color:var(--accent)}.match.fallback{border-style:dashed}.match.fallback strong{color:var(--warn)}.foot{margin-top:18px;color:#7f8da4;font-size:12px;line-height:1.55}.foot a{color:#a8c3ff}.error{color:#ffb6b6}.listening{color:var(--accent)}
+@media(max-width:900px){.hero{grid-template-columns:1fr}.stage{min-height:560px}.copy{padding:26px}.meta{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:520px){.shell{width:min(100% - 20px,1180px)}.topbar{margin-bottom:18px}.pill.hide-sm{display:none}.copy{padding:20px}.copy h1{font-size:43px}.canvaswrap{height:430px}.stage{min-height:490px}.meta{gap:6px}.metric strong{font-size:17px}}
+</style>
+</head>
+<body>
+<main class="shell">
+  <div class="topbar">
+    <div class="brand">CoSpeakLocal</div>
+    <div style="display:flex;gap:8px"><span class="pill"><span class="dot"></span>Vercel demo</span><span class="pill hide-sm">isolated ASL dictionary · no GPU</span></div>
+  </div>
+  <section class="hero">
+    <div class="copy">
+      <div class="eyebrow">English → isolated ASL pose</div>
+      <h1>Turn English into sign motion.</h1>
+      <p class="sub">Type or speak English. CoSpeakLocal maps known words and phrases to real isolated ASL clips, stitches them into one upper-body pose sequence, and explicitly marks vocabulary it does not know.</p>
+      <div class="inputbox">
+        <textarea id="text" aria-label="English text">hello thank you</textarea>
+        <div class="actions">
+          <button id="generate" class="btn primary" type="button">Generate motion</button>
+          <button id="mic" class="btn mic" type="button">Use microphone</button>
+        </div>
+      </div>
+      <div class="examples" aria-label="Example prompts">
+        <button class="example" data-text="hello">hello</button>
+        <button class="example" data-text="thank you">thank you</button>
+        <button class="example" data-text="yes please">yes please</button>
+        <button class="example" data-text="how are you">how are you</button>
+      </div>
+      <div class="meta">
+        <div class="metric"><strong id="signCount">—</strong><span>isolated signs</span></div>
+        <div class="metric"><strong>ASL</strong><span>word-level dictionary</span></div>
+        <div class="metric"><strong>543</strong><span>landmark slots / frame</span></div>
+      </div>
+    </div>
+    <div class="stage">
+      <div class="stagehead"><strong>Motion preview</strong><div id="status" class="status">Ready</div></div>
+      <div class="canvaswrap"><canvas id="c" width="900" height="900"></canvas><div class="floor"></div><div id="matches" class="matches"></div></div>
+    </div>
+  </section>
+</main>
+<script>
+const textEl=document.getElementById('text'),statusEl=document.getElementById('status'),generateBtn=document.getElementById('generate'),micBtn=document.getElementById('mic'),matchesEl=document.getElementById('matches');
+let animation=null,recognition=null;
+const body=[[11,12],[11,13],[13,15],[12,14],[14,16]],hand=[[0,1],[1,2],[2,3],[3,4],[0,5],[5,6],[6,7],[7,8],[5,9],[9,10],[10,11],[11,12],[9,13],[13,14],[14,15],[15,16],[13,17],[17,18],[18,19],[19,20],[0,17]],edges=[...body,...hand.map(e=>e.map(i=>i+33)),...hand.map(e=>e.map(i=>i+54))];
+function setStatus(msg,cls=''){statusEl.className='status '+cls;statusEl.textContent=msg}
+const faceContours=[[0,267],[7,163],[10,338],[13,312],[14,317],[17,314],[21,54],[33,7],[33,246],[37,0],[39,37],[40,39],[46,53],[52,65],[53,52],[54,103],[58,132],[61,146],[61,185],[63,105],[65,55],[66,107],[67,109],[70,63],[78,95],[78,191],[80,81],[81,82],[82,13],[84,17],[87,14],[88,178],[91,181],[93,234],[95,88],[103,67],[105,66],[109,10],[127,162],[132,93],[136,172],[144,145],[145,153],[146,91],[148,176],[149,150],[150,136],[152,148],[153,154],[154,155],[155,133],[157,173],[158,157],[159,158],[160,159],[161,160],[162,21],[163,144],[172,58],[173,133],[176,149],[178,87],[181,84],[185,40],[191,80],[234,127],[246,161],[249,390],[251,389],[263,249],[263,466],[267,269],[269,270],[270,409],[276,283],[282,295],[283,282],[284,251],[288,397],[293,334],[295,285],[296,336],[297,332],[300,293],[310,415],[311,310],[312,311],[314,405],[317,402],[318,324],[321,375],[323,361],[324,308],[332,284],[334,296],[338,297],[356,454],[361,288],[365,379],[373,374],[374,380],[375,291],[377,152],[378,400],[379,378],[380,381],[381,382],[382,362],[384,398],[385,384],[386,385],[387,386],[388,387],[389,356],[390,373],[397,365],[398,362],[400,377],[402,318],[405,321],[409,291],[415,308],[454,323],[466,388]];
+let viewBounds=null;
+function validPoint(p){return p && Number.isFinite(p[0]) && Number.isFinite(p[1])}
+function componentVisible(f,s,n){const p=f.slice(s,s+n).filter(validPoint);return p.length>1&&p.some(v=>Math.hypot(v[0]-p[0][0],v[1]-p[0][1])>1e-6)}
+function segments(f){
+ const lines=body.map(([a,b])=>[a,b,'#ef2929',3]);
+ lines.push([11,23,'#a81d23',3],[12,24,'#a81d23',3],[23,24,'#a81d23',3]);
+ if(f.length===543&&componentVisible(f,33,468))for(const[a,b]of faceContours)lines.push([a+33,b+33,'#cf2424',2]);
+ const start=f.length===543?501:33,colors=['#ffb85c','#79ef40','#20d6a7','#38bdea','#815aef'];
+ for(const s of [start,start+21]){
+  if(!componentVisible(f,s,21))continue;
+  for(let k=0;k<5;k++){const chain=[0,1+k*4,2+k*4,3+k*4,4+k*4];for(let j=1;j<5;j++)lines.push([s+chain[j-1],s+chain[j],colors[k],2.5])}
+  for(const[a,b]of [[5,9],[9,13],[13,17]])lines.push([s+a,s+b,'#83c4d4',2]);
+ }
+ return lines;
+}
+function fitSequence(frames){
+ let minX=Infinity,minY=Infinity,maxX=-Infinity,maxY=-Infinity;
+ for(const f of frames)for(const[a,b]of segments(f))for(const i of [a,b]){const p=f[i];if(!validPoint(p))continue;minX=Math.min(minX,p[0]);maxX=Math.max(maxX,p[0]);minY=Math.min(minY,p[1]);maxY=Math.max(maxY,p[1])}
+ viewBounds=Number.isFinite(minX)?{minX,minY,maxX,maxY}:null;
+}
+function draw(frame){
+ const c=document.getElementById('c'),ctx=c.getContext('2d'),rect=c.getBoundingClientRect(),w=rect.width,h=rect.height,dpr=window.devicePixelRatio||1;
+ if(c.width!==Math.round(w*dpr)||c.height!==Math.round(h*dpr)){c.width=Math.round(w*dpr);c.height=Math.round(h*dpr)}
+ ctx.setTransform(dpr,0,0,dpr,0,0);ctx.fillStyle='#202223';ctx.fillRect(0,0,w,h);
+ if(!frame||!viewBounds)return;
+ const {minX,minY,maxX,maxY}=viewBounds,pad=28,bottom=65;
+ // A single scale in CSS pixels, with stable bounds across the entire sequence.
+ const scale=Math.min((w-2*pad)/Math.max(maxX-minX,.01),(h-pad-bottom)/Math.max(maxY-minY,.01));
+ const ox=w/2-(minX+maxX)/2*scale,oy=(h-bottom+pad)/2-(minY+maxY)/2*scale;
+ ctx.lineCap='round';ctx.lineJoin='round';
+ for(const[a,b,color,width]of segments(frame)){if(!validPoint(frame[a])||!validPoint(frame[b]))continue;ctx.strokeStyle=color;ctx.lineWidth=width;ctx.beginPath();ctx.moveTo(ox+frame[a][0]*scale,oy+frame[a][1]*scale);ctx.lineTo(ox+frame[b][0]*scale,oy+frame[b][1]*scale);ctx.stroke()}
+}
+function showMatches(items){matchesEl.replaceChildren();for(const m of(items||[])){const unknown=m.mode==='unknown',skipped=m.mode==='function_word';const el=document.createElement('span');el.className='match '+(unknown?'fallback':'');el.title=unknown?`No isolated sign in current dictionary for: ${m.surface}`:skipped?`English function word skipped by the simple gloss mapper: ${m.surface}`:`${m.surface} → ${m.gloss}`;const strong=document.createElement('strong');strong.textContent=unknown?'unknown':skipped?'skip':'ASL';el.append(strong,document.createTextNode(unknown||skipped?` · ${m.surface}`:` · ${m.gloss}`));matchesEl.appendChild(el)}}
+function play(data){if(animation!==null)cancelAnimationFrame(animation);showMatches(data.matches);const frames=data.frames||[],fps=Math.max(1,Number(data.fps)||25),frameMs=1000/fps;setStatus(`${frames.length} frames · ${data.matches?.length||0} motion segment${data.matches?.length===1?'':'s'}`);fitSequence(frames);draw(frames[0]);if(!frames.length)return;let start=null,last=-1;const tick=now=>{if(start===null)start=now;const i=Math.floor((now-start)/frameMs)%frames.length;if(i!==last){last=i;draw(frames[i])}animation=requestAnimationFrame(tick)};animation=requestAnimationFrame(tick)}
+async function runText(){const text=textEl.value.trim();if(!text){setStatus('Enter English text first','error');return}generateBtn.disabled=true;setStatus('Generating…');try{const fd=new FormData();fd.append('text',text);const r=await fetch('/api/text-to-pose',{method:'POST',body:fd});if(!r.ok)throw new Error(await r.text());play(await r.json())}catch(e){setStatus(String(e.message||e),'error')}finally{generateBtn.disabled=false}}
+generateBtn.addEventListener('click',runText);textEl.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='Enter')runText()});document.querySelectorAll('.example').forEach(b=>b.addEventListener('click',()=>{textEl.value=b.dataset.text;runText()}));
+const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
+if(SpeechRecognition){recognition=new SpeechRecognition();recognition.lang='en-US';recognition.interimResults=false;recognition.continuous=false;recognition.onstart=()=>{micBtn.classList.add('active');micBtn.textContent='Listening…';setStatus('Listening in English…','listening')};recognition.onend=()=>{micBtn.classList.remove('active');micBtn.textContent='Use microphone'};recognition.onerror=e=>setStatus(`Speech input: ${e.error}`,'error');recognition.onresult=e=>{const transcript=e.results[0][0].transcript;textEl.value=transcript;runText()};micBtn.addEventListener('click',()=>{try{recognition.start()}catch{}})}else{micBtn.disabled=true;micBtn.title='Browser speech recognition is not available here';micBtn.textContent='Microphone unavailable'}
+fetch('/api/health').then(r=>r.ok?r.json():null).then(x=>{if(x){document.getElementById('signCount').textContent=x.signs;setStatus(`Ready · ${x.signs} isolated signs`)}}).catch(()=>{});
+runText();
+</script>
+</body>
+</html>

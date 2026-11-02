@@ -1,0 +1,7 @@
+language: en
+pose_layout: mediapipe_75
+fps: 25
+retrieval_model: stdlib_tfidf_word_1_2
+speech_model: tiny.en
+transition_frames: 8
+sign_language_recognition: false
