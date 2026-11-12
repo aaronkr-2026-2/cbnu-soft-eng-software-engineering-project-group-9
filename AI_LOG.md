@@ -40,3 +40,19 @@ Every time you update your project, please make a note of what you did in the `A
 **Something the AI got wrong that I had to catch:** The first architecture draft included unnecessary dataset statistics.
 
 **Result:** Sprint 1's dictionary-expansion goal is complete. Remaining backlog items are follow-up work.
+
+---
+
+## Searchable dictionary and pose investigation — 12 November 2026
+
+**Tool(s) used:** Codex
+
+**What I asked for:** Let visitors browse supported words instead of guessing, and investigate detached hands in the expanded poses.
+
+**What I kept as-is:** The active dictionary, source clips, and pose playback pipeline.
+
+**What I changed or rejected, and why:** Added a dictionary API, searchable word buttons, retry feedback, tests, and documentation. Kept pose-quality work open: adding vocabulary does not mean all clips are visually correct.
+
+**Something the AI got wrong that I had to catch:** Expanded clips can show detached hands. Tracking errors and absolute-position gap filling need further repair and visual review.
+
+**Result:** Dictionary API and interaction checks pass (27 Python tests and 2 JavaScript tests). Pose defects were investigated, not repaired in this update.

@@ -9,6 +9,7 @@
 ### Main features
 
 - Enter English text or use browser speech input.
+- Search available words and phrases and click to add them to the input.
 - Match words and phrases against a WLASL-derived sign dictionary.
 - Join motion clips with interpolated transitions and temporal smoothing.
 - Display body, face, and hand landmarks on a browser canvas.
@@ -111,6 +112,7 @@ Motion clips contain body, face, and hand landmarks. The deployment stores prepa
 | --- | --- | --- | --- |
 | `GET` | `/` | Serve the web interface | None |
 | `GET` | `/api/health` | Report runtime, vocabulary count, and speech availability | None |
+| `GET` | `/api/dictionary` | List sorted canonical words from the active dictionary, without file paths | None |
 | `POST` | `/api/text-to-pose` | Generate a pose sequence from English | Form field `text` |
 | `POST` | `/api/speech-to-pose` | Transcribe uploaded audio and generate poses | Multipart file field `file` |
 | `GET` | `/api/docs` | Interactive FastAPI API documentation | None |
@@ -167,17 +169,19 @@ Environment variables configure the dictionary location and request/response lim
 - Concatenation does not implement continuous-ASL grammar or contextual facial expression generation.
 - Source signers and camera conditions vary; automated tracking coverage does not establish linguistic correctness.
 - Long sequences are limited for response size, which can affect playback timing.
-- Semantic embeddings, typo-tolerant retrieval, and a searchable vocabulary interface are planned.
+- Semantic embeddings and typo-tolerant retrieval are planned.
+- Some clips contain detached hands due to tracking errors and missing-landmark interpolation; visual quality review remains open.
 
 **Future improvements**
 
 - Add contextual retrieval with evaluated thresholds for approximate matches.
 - Expand vocabulary and introduce visual and linguistic review of clips.
 - Improve transition quality, duration preservation, and missing-landmark handling.
-- Add vocabulary discovery and examples.
+- Improve vocabulary examples and pose-quality feedback.
 
 ## 11. Architecture Change Log
 
 | Date | Change | Reason |
 | --- | --- | --- |
 | 2026-10-20 | Documented the application layers, preparation pipeline, and deployment | Provide a general overview of the implemented architecture |
+| 2026-11-12 | Added searchable dictionary API and interface; recorded pose-quality defects | Make supported input discoverable and distinguish availability from quality |

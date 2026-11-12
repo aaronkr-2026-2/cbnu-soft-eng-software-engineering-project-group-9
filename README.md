@@ -4,7 +4,9 @@ Small, English-only **text/speech → isolated ASL pose** prototype.
 
 ## MVP Status
 
-Sprint 1 is complete: the WLASL pose dictionary has been expanded to 300 signs and is deployed on Vercel. Semantic retrieval and vocabulary discovery remain planned follow-up work.
+Sprint 1's dictionary-expansion goal is complete. The website now includes a searchable sign dictionary: browse available words, click to add them to the input, then select **Generate motion**. The list comes from the active dictionary rather than a manually maintained word list.
+
+Semantic retrieval remains planned. Some expanded clips have hand-tracking defects (including detached hands in coffee); vocabulary availability is not a guarantee of pose quality.
 
 Speech input uses browser speech recognition; local audio transcription is available with faster-whisper.
 

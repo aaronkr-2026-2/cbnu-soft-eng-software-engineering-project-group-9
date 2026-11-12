@@ -92,6 +92,13 @@ def health() -> dict:
     }
 
 
+@app.get("/api/dictionary")
+def vocabulary() -> dict:
+    """Expose canonical labels only, without local paths or pose payloads."""
+    words = sorted(sign_dictionary().by_gloss)
+    return {"words": words, "count": len(words)}
+
+
 @app.post("/api/text-to-pose")
 def text_to_pose(text: str = Form(...)):
     return generate(text)
