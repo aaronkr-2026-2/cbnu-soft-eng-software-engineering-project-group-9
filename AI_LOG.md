@@ -68,3 +68,15 @@ Every time you update your project, please make a note of what you did in the `A
 **What was wrong:** Absolute-position interpolation could freeze hands, and full-video annotation offsets were incorrectly reused for some already-cut local clips.
 
 **Validation:** 32 Python tests and 2 JavaScript tests pass; coffee's replacement tracks both hands throughout, with sampled pose frames visually inspected. Full dictionary visual/linguistic review remains open; filtering is not recovery of unobserved motion.
+
+## Dictionary sidebar — 12 November 2026
+
+**Tool used:** Codex
+
+**Request:** Let visitors open a sidebar to discover supported words instead of guessing.
+
+**Changes:** Converted the vocabulary section into a searchable sidebar with click-to-add words, close/Done controls, Escape handling, and keyboard focus management. Kept the existing dictionary API and pose data unchanged.
+
+**What testing caught:** The browser search field could consume Escape; explicit handling now closes the sidebar. Keyboard focus is kept inside the open sidebar.
+
+**Validation:** 32 Python tests, 3 JavaScript tests, and browser checks at desktop and mobile widths pass.

@@ -4,7 +4,7 @@ Small, English-only **text/speech → isolated ASL pose** prototype.
 
 ## MVP Status
 
-Sprint 1's dictionary-expansion goal is complete. The website now includes a searchable sign dictionary: browse available words, click to add them to the input, then select **Generate motion**. The list comes from the active dictionary rather than a manually maintained word list.
+Sprint 1's dictionary-expansion goal is complete. Select **Browse dictionary** beside the input controls to open the searchable sidebar. Click words or phrases to add them to your text, choose **Done — return to text**, then **Generate motion**. Close the sidebar with **Close**, Escape, or a click outside it. The word list comes from the active dictionary rather than a manually maintained list.
 
 Semantic retrieval remains planned. Detached-hand handling has been corrected, the pose bundle cleaned, and selected clips re-extracted. Missing long hand tracks remain hidden rather than fabricated; vocabulary availability is not a guarantee of tracking or linguistic quality.
 

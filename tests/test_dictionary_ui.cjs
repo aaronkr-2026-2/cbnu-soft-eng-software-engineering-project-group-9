@@ -13,13 +13,17 @@ class Element {
     if (child.fragment) this.children.push(...child.children);
     else this.children.push(child);
   }
-  setAttribute() {}
+  setAttribute(name, value) { this[name] = value; }
+  focus() { this.focused = true; }
+  showModal() { this.open = true; }
+  close() { this.open = false; this.listeners.close(); }
   dispatchEvent() {}
 }
 
 async function setup(fetch) {
   const elements = {};
   const document = {
+    body: {classList: {add() {}, remove() {}}},
     getElementById: id => elements[id] ||= new Element(),
     createElement: () => new Element(),
     createDocumentFragment: () => Object.assign(new Element(), {fragment: true}),
@@ -58,4 +62,18 @@ test('network failure offers retry and recovers', async () => {
   await e['dictionary-retry'].listeners.click();
   assert.equal(e['word-search'].disabled, false);
   assert.equal(e['word-list'].children.length, 1);
+});
+
+test('sidebar opens, closes and returns to the text input on Done', async () => {
+  const e = await setup(async () => ({ok: true, json: async () => ({words: ['coffee']})}));
+  e['dictionary-open'].listeners.click();
+  assert.equal(e['dictionary-panel'].open, true);
+  assert.equal(e['dictionary-open']['aria-expanded'], 'true');
+  assert.equal(e['word-search'].focused, true);
+  e['dictionary-close'].listeners.click();
+  assert.equal(e['dictionary-panel'].open, false);
+  assert.equal(e['dictionary-open']['aria-expanded'], 'false');
+  e['dictionary-open'].listeners.click();
+  e['dictionary-done'].listeners.click();
+  assert.equal(e.text.focused, true);
 });

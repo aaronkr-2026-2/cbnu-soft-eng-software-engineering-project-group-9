@@ -10,6 +10,7 @@
 
 - Enter English text or use browser speech input.
 - Search available words and phrases and click to add them to the input.
+- Open the dictionary sidebar from the input controls; search, select words, and return to the text field.
 - Match words and phrases against a WLASL-derived sign dictionary.
 - Join motion clips with interpolated transitions and temporal smoothing.
 - Display body, face, and hand landmarks on a browser canvas.

@@ -12,6 +12,15 @@
 @media(max-width:520px){.shell{width:min(100% - 20px,1180px)}.topbar{margin-bottom:18px}.pill.hide-sm{display:none}.copy{padding:20px}.copy h1{font-size:43px}.canvaswrap{height:430px}.stage{min-height:490px}.meta{gap:6px}.metric strong{font-size:17px}}
 .dictionary{margin-top:26px;padding:24px;border:1px solid var(--line);border-radius:20px;background:var(--panel)}.dictionary h2{margin:0 0 8px}.dictionary p{color:var(--muted);line-height:1.5}.dictionary input{width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;background:var(--panel2);color:var(--text);font:inherit}.word-list{display:flex;flex-wrap:wrap;gap:8px;max-height:300px;overflow-y:auto;padding:8px 2px}.word-list button{font-size:14px}.dictionary :focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 </style>
+<style>
+.dictionary{position:fixed;inset:0 0 0 auto;margin:0;width:min(440px,100%);height:100%;height:100dvh;max-height:100dvh;max-width:100%;border-radius:22px 0 0 22px;color:var(--text);padding:24px;box-shadow:-20px 0 70px #0006;overflow-y:auto}
+.dictionary::backdrop{background:#030713aa}
+.dictionary-header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+.dictionary-header h2{margin:0}.dictionary .word-list{max-height:none;align-content:flex-start}
+.dictionary-footer{position:sticky;bottom:-24px;background:var(--panel);border-top:1px solid var(--line);margin-top:16px;padding:12px 0}
+body.dictionary-open{overflow:hidden}
+@media(max-width:520px){.dictionary{padding:20px;border-radius:0}.dictionary-footer{bottom:-20px}}
+</style>
 </head>
 <body>
 <main class="shell">
@@ -29,6 +38,7 @@
         <div class="actions">
           <button id="generate" class="btn primary" type="button">Generate motion</button>
           <button id="mic" class="btn mic" type="button">Use microphone</button>
+          <button id="dictionary-open" class="btn" type="button" aria-haspopup="dialog" aria-controls="dictionary-panel" aria-expanded="false">Browse dictionary</button>
         </div>
       </div>
       <div class="examples" aria-label="Example prompts">
@@ -48,16 +58,16 @@
       <div class="canvaswrap"><canvas id="c" width="900" height="900"></canvas><div class="floor"></div><div id="matches" class="matches"></div></div>
     </div>
   </section>
-  <section class="dictionary" aria-labelledby="dictionary-title">
-    <h2 id="dictionary-title">Sign dictionary</h2>
-    <p>Browse supported English words and phrases. Click a word to add it to your text, then select Generate motion. Availability does not guarantee tracking quality.</p>
+  <dialog id="dictionary-panel" class="dictionary" aria-labelledby="dictionary-title" aria-describedby="dictionary-help">
+    <div class="dictionary-header"><h2 id="dictionary-title">Sign dictionary</h2><button id="dictionary-close" class="btn" type="button" aria-label="Close dictionary">Close</button></div>
+    <p id="dictionary-help">Search or browse supported English words and phrases. Click words to build your text, then return to generate motion.</p>
     <label for="word-search">Search available words</label>
     <input id="word-search" type="search" placeholder="Search, for example: coffee" autocomplete="off" disabled>
     <p id="dictionary-status" role="status" aria-live="polite">Loading dictionary...</p>
     <button id="dictionary-retry" class="btn" type="button" hidden>Retry loading dictionary</button>
     <div id="word-list" class="word-list" role="group" aria-label="Available words"></div>
-    <p id="dictionary-selection" role="status" aria-live="polite"></p>
-  </section>
+    <div class="dictionary-footer"><p id="dictionary-selection" role="status" aria-live="polite"></p><button id="dictionary-done" class="btn primary" type="button">Done — return to text</button></div>
+  </dialog>
 </main>
 <script src="/dictionary.js" defer></script>
 <script>

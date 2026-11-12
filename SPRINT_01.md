@@ -44,6 +44,8 @@ Owner: Đỗ Minh Tùng.
 - [x] Add searchable word buttons that append words or phrases to the input.
 - [x] Handle loading failures, retry, and searches with no results.
 - [x] Verify API and interaction behavior with automated tests.
+- [x] Present vocabulary in an open/close sidebar with search, click-to-add, and return-to-text controls.
+- [x] Check sidebar layout and keyboard navigation in a real browser at desktop and mobile widths.
 - [ ] Check the deployed dictionary on desktop and mobile before closing #6.
 - [x] Under #5, reject detached hand tracks, bound gap filling, connect rendered forearms to tracked hand roots, and reprocess the pose bundle.
 - [x] Re-extract coffee, book, and drink; verify coffee's hand coverage and sampled rendered frames.
@@ -57,6 +59,8 @@ Pose-repair follow-up: 32 Python tests and 2 JavaScript tests pass, including a 
 - End-of-sprint review: demonstrate the hosted 300-sign dictionary and close accepted issues.
 
 ## Definition of done
+
+Sidebar follow-up (12 November 2026): 32 Python tests, 3 JavaScript interaction tests, and desktop/mobile browser smoke checks pass locally. No pose data changed in this UI update.
 
 - [x] Implementation is committed and pushed.
 - [x] Automated tests pass.
