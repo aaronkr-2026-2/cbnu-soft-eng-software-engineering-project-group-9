@@ -5,14 +5,14 @@ from pathlib import Path
 import cv2
 import numpy as np
 
-from .normalize import interpolate_missing
+from .normalize import interpolate_missing, repair_hand_tracks
 from .schema import MotionClip
 
 
 def _extract_with_pose_format(
     frames: list[np.ndarray], fps: float, width: int, height: int
 ) -> tuple[np.ndarray, np.ndarray]:
-    """Run pose-format Holistic and retain the runtime's 75 landmarks.
+    """Run pose-format Holistic and retain all 543 landmarks.
 
     pose-format owns MediaPipe extraction, confidence tracking and whole-sequence
     shoulder normalization.  The full 33 body + 468 face + 21 left-hand + 21
@@ -64,7 +64,7 @@ def extract_video(
     end_time: float | None = None,
     gesture_type: str | None = None,
 ) -> MotionClip:
-    """Extract, globally normalize, and save a pose-format ``[T,75,3]`` clip."""
+    """Extract, globally normalize, and save a pose-format ``[T,543,3]`` clip."""
     cap = cv2.VideoCapture(str(video_path))
     if not cap.isOpened():
         raise FileNotFoundError(f"cannot open video: {video_path}")
@@ -103,7 +103,12 @@ def extract_video(
     pose_seen = np.any(confidence[:, :33] > 0.0, axis=1)
     left_seen = np.any(confidence[:, 501:522] > 0.0, axis=1)
     right_seen = np.any(confidence[:, 522:543] > 0.0, axis=1)
+    # Keep the original hand observation mask: generic interpolation would
+    # freeze hands through long occlusions and extrapolate them at clip edges.
+    raw_hands = arr[:, 501:].copy()
     arr = interpolate_missing(arr)
+    arr[:, 501:] = raw_hands
+    arr = repair_hand_tracks(arr, max_gap=max(1, round(fps * 0.12)))
     clip = MotionClip(
         clip_id=clip_id,
         text=text.strip(),

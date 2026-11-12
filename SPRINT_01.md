@@ -45,9 +45,13 @@ Owner: Đỗ Minh Tùng.
 - [x] Handle loading failures, retry, and searches with no results.
 - [x] Verify API and interaction behavior with automated tests.
 - [ ] Check the deployed dictionary on desktop and mobile before closing #6.
-- [ ] Under #5, repair and visually review hand-tracking defects in expanded clips. Coffee, book, and drink show hand/body wrist disagreement; interpolation can preserve misplaced or stale hand positions.
+- [x] Under #5, reject detached hand tracks, bound gap filling, connect rendered forearms to tracked hand roots, and reprocess the pose bundle.
+- [x] Re-extract coffee, book, and drink; verify coffee's hand coverage and sampled rendered frames.
+- [ ] Complete visual and linguistic review across the dictionary; replace clips with long tracking gaps.
 
 Validation: 27 Python tests and 2 JavaScript interaction tests pass. These tests do not establish visual or linguistic correctness of the pose dataset. Sprint 1 completion refers to dictionary expansion, not completion of pose-quality review.
+
+Pose-repair follow-up: 32 Python tests and 2 JavaScript tests pass, including a dictionary-wide wrist-distance check and a coffee/multi-sign API regression. Existing good observations are preserved; only short internal gaps are filled in wrist-relative coordinates. Long gaps are not reconstructed.
 
 - Daily 10-minute progress check-in: report extracted-sign count, failures, and bundle size.
 - End-of-sprint review: demonstrate the hosted 300-sign dictionary and close accepted issues.

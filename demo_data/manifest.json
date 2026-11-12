@@ -1,7 +1,7 @@
 {
   "signs": 300,
-  "landmark_frames": 18580,
-  "motion_bytes": 108543193,
+  "landmark_frames": 18522,
+  "motion_bytes": 108143746,
   "landmarks_per_frame": 543,
   "source_dataset": "WLASL",
   "raw_video_included": false,

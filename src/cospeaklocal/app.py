@@ -9,6 +9,7 @@ from .sign_dictionary import SignDictionary, normalize_words
 from .speech import transcribe_local
 from .stitch import smooth_sequence, stitch_sequences
 from .render import pose_to_jsonable
+from .normalize import repair_hand_tracks
 
 ROOT = Path(__file__).resolve().parents[2]
 WEB = ROOT / "web"
@@ -49,6 +50,8 @@ def generate(text: str) -> dict:
     plan = planner.plan(text)
     clips = planner.clips_for_plan(plan)
     seq = smooth_sequence(stitch_sequences([c.poses for c in clips], transition_frames=3))
+    # A final guard also covers old bundles and boundary/smoothing artifacts.
+    seq = repair_hand_tracks(seq, max_gap=0)
     matches = []
     unknown = []
     for m in plan:

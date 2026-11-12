@@ -70,7 +70,11 @@ let viewBounds=null;
 function validPoint(p){return p && Number.isFinite(p[0]) && Number.isFinite(p[1])}
 function componentVisible(f,s,n){const p=f.slice(s,s+n).filter(validPoint);return p.length>1&&p.some(v=>Math.hypot(v[0]-p[0][0],v[1]-p[0][1])>1e-6)}
 function segments(f){
- const lines=body.map(([a,b])=>[a,b,'#ef2929',3]);
+ const handStart=f.length===543?501:33;
+ // Body and hand trackers estimate the same wrist separately. When a valid
+ // hand exists, draw the forearm to its root without moving/scaling fingers.
+ const wristEnd=i=>i===15&&componentVisible(f,handStart,21)?handStart:i===16&&componentVisible(f,handStart+21,21)?handStart+21:i;
+ const lines=body.map(([a,b])=>[a,wristEnd(b),'#ef2929',3]);
  lines.push([11,23,'#a81d23',3],[12,24,'#a81d23',3],[23,24,'#a81d23',3]);
  if(f.length===543&&componentVisible(f,33,468))for(const[a,b]of faceContours)lines.push([a+33,b+33,'#cf2424',2]);
  const start=f.length===543?501:33,colors=['#ffb85c','#79ef40','#20d6a7','#38bdea','#815aef'];

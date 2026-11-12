@@ -170,7 +170,7 @@ Environment variables configure the dictionary location and request/response lim
 - Source signers and camera conditions vary; automated tracking coverage does not establish linguistic correctness.
 - Long sequences are limited for response size, which can affect playback timing.
 - Semantic embeddings and typo-tolerant retrieval are planned.
-- Some clips contain detached hands due to tracking errors and missing-landmark interpolation; visual quality review remains open.
+- Hand processing rejects detached tracks and fills only short internal gaps relative to the wrist. Long gaps remain missing; visual quality review and source replacement remain open.
 
 **Future improvements**
 
@@ -185,3 +185,4 @@ Environment variables configure the dictionary location and request/response lim
 | --- | --- | --- |
 | 2026-10-20 | Documented the application layers, preparation pipeline, and deployment | Provide a general overview of the implemented architecture |
 | 2026-11-12 | Added searchable dictionary API and interface; recorded pose-quality defects | Make supported input discoverable and distinguish availability from quality |
+| 2026-11-12 | Reprocessed hand tracks, corrected local clip trimming, and connected forearms to tracked hand roots | Prevent stale or detached hands without inventing long missing motion |

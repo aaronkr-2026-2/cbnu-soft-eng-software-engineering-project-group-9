@@ -56,3 +56,15 @@ Every time you update your project, please make a note of what you did in the `A
 **Something the AI got wrong that I had to catch:** Expanded clips can show detached hands. Tracking errors and absolute-position gap filling need further repair and visual review.
 
 **Result:** Dictionary API and interaction checks pass (27 Python tests and 2 JavaScript tests). Pose defects were investigated, not repaired in this update.
+
+## Hand-track repair — 12 November 2026
+
+**Tool used:** Codex
+
+**Request:** Fix broken new poses and reprocess source data where needed.
+
+**Changes:** Reject detached hand tracks, fill short gaps relative to the wrist, preserve missing long gaps, and connect displayed forearms to tracked hand roots. Reprocessed the bundle and re-extracted coffee, book, and drink. Added an explicit option for already-trimmed local videos.
+
+**What was wrong:** Absolute-position interpolation could freeze hands, and full-video annotation offsets were incorrectly reused for some already-cut local clips.
+
+**Validation:** 32 Python tests and 2 JavaScript tests pass; coffee's replacement tracks both hands throughout, with sampled pose frames visually inspected. Full dictionary visual/linguistic review remains open; filtering is not recovery of unobserved motion.

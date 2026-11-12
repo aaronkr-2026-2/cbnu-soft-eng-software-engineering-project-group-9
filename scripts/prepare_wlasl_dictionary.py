@@ -132,12 +132,16 @@ def main() -> int:
     ap.add_argument('--yt-dlp', default=('tools/yt-dlp.exe' if sys.platform.startswith('win') else 'tools/yt-dlp'))
     ap.add_argument('--glosses', default=','.join(DEFAULT_GLOSSES))
     ap.add_argument('--local-video-root', help='pre-downloaded WLASL corpus; skips yt-dlp downloads')
+    ap.add_argument('--local-clips-trimmed', action='store_true',
+                    help='local files are already isolated WLASL clips; do not apply full-video offsets again')
     ap.add_argument('--target-count', type=int, help='expand the requested/current dictionary to this many locally covered glosses')
     ap.add_argument('--portable-index-paths', action='store_true', help='store clip paths relative to the index for deployment')
     ap.add_argument('--max-attempts-per-gloss', type=int, default=4)
     ap.add_argument('--force', action='store_true', help='re-extract existing clips with the active pose pipeline')
     ap.add_argument('--keep-source', action='store_true')
     args=ap.parse_args()
+    if args.local_clips_trimmed and not args.local_video_root:
+        ap.error('--local-clips-trimmed requires --local-video-root')
     metadata=ensure_metadata(Path(args.metadata))
     out=Path(args.out); out.mkdir(parents=True,exist_ok=True)
     cache=Path(args.cache); ytdlp=Path(args.yt_dlp).resolve()
@@ -186,6 +190,8 @@ def main() -> int:
                 fe=int(inst.get('frame_end') or -1)
                 start=(fs-1)/ann_fps
                 end=None if fe < 0 else (fe-1)/ann_fps
+                if args.local_clips_trimmed:
+                    start, end = 0.0, None
                 cid=f'wlasl_{safe}_{inst.get("video_id")}'
                 path=out/f'{safe}__{inst.get("video_id")}.npz'
                 pending=path.with_suffix('.pending.npz')
